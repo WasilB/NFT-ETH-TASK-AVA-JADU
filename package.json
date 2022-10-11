@@ -1,0 +1,19 @@
+{
+  "name": "assettask",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@alch/alchemy-web3": "^1.4.6",
+    "@ankr.com/ankr.js": "^0.1.9",
+    "alchemy-sdk": "^2.1.1",
+    "node-fetch": "^3.2.10",
+    "web3": "^1.8.0"
+  }
+}

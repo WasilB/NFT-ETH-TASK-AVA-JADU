@@ -1,8 +1,11 @@
 const Web3 = require("web3");
 const abi_def = require("./abi");
 const ava_abi = require("./avaAbi");
+const axios = require("axios");
 const abi = abi_def;
 let test;
+const uri = [];
+const finalMeta = [];
 
 const rpcURL = "https://mainnet.infura.io/v3/21d1df8208a048dfa2fa3acf5ba3776b";
 const web3 = new Web3(rpcURL);
@@ -26,7 +29,16 @@ async function getdata() {
       const tokens = await contract.methods.tokensOfOwner(accountAddr).call();
       const balance = await contract.methods.balanceOf(accountAddr).call();
 
-      data.push({ name: name, Balance: balance, TokensID: tokens });
+      for (let j = 0; j < tokens.length; j++) {
+        uri[j] = await contract.methods.tokenURI(tokens[j]).call();
+
+        const response = await axios.get(uri[j]);
+        data.push({
+          name: name,
+          Balance: balance,
+          TokenMetaData: response.data,
+        });
+      }
     } else {
       const stoken = await contract.methods.balanceOf(accountAddr).call();
       for (let i = 0; i < stoken; i++) {
@@ -35,10 +47,17 @@ async function getdata() {
           .call();
         test = result;
       }
-
+      const uri = await contract.methods.tokenURI(test).call();
       const name = await contract.methods.name().call();
       const balance = await contract.methods.balanceOf(accountAddr).call();
-      data.push({ name: name, Balance: balance, TokensID: test });
+      const response = await axios.get(uri);
+
+      data.push({
+        name: name,
+        Balance: balance,
+        TokenURI: uri,
+        TokenMetaData: response.data,
+      });
     }
   }
 }
